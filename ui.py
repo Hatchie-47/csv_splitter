@@ -2,16 +2,6 @@ import tkinter as tk
 from tkinter import filedialog, ttk
 from csv_processor import CSVProcessor
 
-"""
-A function to be called after every change in The radio buttons or N or file:
-If radiobutton changed, put N back to 0 and disable split button
-If N is set, fill the treeview with files preview and row numbers and make split button available
-
-processor should have the functions that created the preview and split the files, both called by Root
-
-info window that shows header and runs the split via buttons Columns and Split file
-"""
-
 class Root(tk.Tk):
 
     def __init__(self) -> None:
@@ -87,7 +77,7 @@ class Root(tk.Tk):
 
     def split_file(self) -> None:
         self.process_frame.progress_bar.grid(column=0, row=3, columnspan=8, padx=10, pady=(2, 10), sticky='sew')
-        self.processor.split_file(self.process_frame.progress_var, self.process_frame.progress_label_var)
+        self.processor.split_file(self.process_frame.progress_var, self.process_frame.progress_label_var, self)
 
 
     def display_column(self) -> None:

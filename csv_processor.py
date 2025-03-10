@@ -1,5 +1,5 @@
 import csv, os
-import tkinter
+import tkinter as tk
 from tkinter import StringVar, IntVar
 from pathlib import Path
 
@@ -47,7 +47,7 @@ class CSVProcessor:
         return result
 
 
-    def split_file(self, progress: tkinter.IntVar, label: tkinter.StringVar) -> None:
+    def split_file(self, progress: tk.IntVar, label: tk.StringVar, root: tk.Tk) -> None:
         with open(self.path) as f:
             reader = csv.reader(f)
             header: list = next(reader)
@@ -62,11 +62,10 @@ class CSVProcessor:
                 label.set(f'Creating {k} ...')
                 done += step
                 progress.set(done)
-                print(k)
+                root.update_idletasks()
                 with open(k, 'w') as fn:
                     fn.write(';'.join(header))
                     for n in range(v):
-                        print(n)
                         fn.write('\n' + ';'.join(next(reader)))
 
             progress.set(100)
