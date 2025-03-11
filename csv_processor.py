@@ -14,7 +14,7 @@ class CSVProcessor:
     def change_file(self, path: StringVar, row_count: IntVar) -> None:
         self.path = Path(path.get())
 
-        with open(self.path) as f:
+        with open(self.path, encoding='utf-8') as f:
             reader = csv.reader(f)
             for row in reader:
                 self.header = row
@@ -48,7 +48,7 @@ class CSVProcessor:
 
 
     def split_file(self, progress: tk.IntVar, label: tk.StringVar, root: tk.Tk) -> None:
-        with open(self.path) as f:
+        with open(self.path, encoding='utf-8') as f:
             reader = csv.reader(f)
             header: list = next(reader)
 
@@ -63,10 +63,11 @@ class CSVProcessor:
                 done += step
                 progress.set(done)
                 root.update_idletasks()
-                with open(k, 'w') as fn:
-                    fn.write(';'.join(header))
+                with open(k, 'w', encoding='utf-8') as fn:
+                    writer = csv.writer(fn, delimiter=';', quotechar='"')
+                    writer.writerow(header)
                     for n in range(v):
-                        fn.write('\n' + ';'.join(next(reader)))
+                        writer.writerow(next(reader))
 
             progress.set(100)
             label.set('Done!')
