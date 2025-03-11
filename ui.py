@@ -1,5 +1,5 @@
 import tkinter as tk
-from tkinter import filedialog, ttk
+from tkinter import filedialog, ttk, messagebox
 from csv_processor import CSVProcessor
 
 class Root(tk.Tk):
@@ -76,8 +76,17 @@ class Root(tk.Tk):
 
 
     def split_file(self) -> None:
+        self.process_frame.progress_var.set(0)
         self.process_frame.progress_bar.grid(column=0, row=3, columnspan=8, padx=10, pady=(2, 10), sticky='sew')
-        self.processor.split_file(self.process_frame.progress_var, self.process_frame.progress_label_var, self)
+        try:
+            self.processor.split_file(self.process_frame.progress_var, self.process_frame.progress_label_var, self)
+        except Exception as e:
+            self.process_frame.progress_var.set(100)
+            self.process_frame.progress_label_var.set('Failed!')
+            self.display_error(e)
+
+    def display_error(self, e: Exception):
+        messagebox.showerror(title='Error!', message=e)
 
 
     def display_column(self) -> None:
@@ -180,8 +189,7 @@ class ProcessFrame(tk.Frame):
         self.progress_bar: ttk.Progressbar = ttk.Progressbar(self,
                                                              orient='horizontal',
                                                              mode='determinate',
-                                                             variable=self.progress_var,
-                                                             style='Striped.Horizontal.TProgressbar')
+                                                             variable=self.progress_var)
         self.progress_bar.grid(column=0, row=3, columnspan=8, padx=10, pady=(2, 10), sticky='sew')
 
         self.run_button: tk.Button = tk.Button(self,
